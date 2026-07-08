@@ -24,7 +24,8 @@ const CART_KEY = "pw_cart_v1";
 // shows a discount that differs from what checkout charges.
 const SUBSCRIPTION = { planId: "6431178995", pct: 17 };
 // Variants NOT on the subscription plan in Shopify — no Subscribe option is shown for these.
-const NO_SUB_VARIANTS = ["49286180405491"]; // Libido Support Strips (add it to the plan in Shopify to enable)
+// (All products are now on the plan, so this is empty.)
+const NO_SUB_VARIANTS = [];
 
 /* ---- state ---------------------------------------------------------- */
 const load = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch (e) { return {}; } };
