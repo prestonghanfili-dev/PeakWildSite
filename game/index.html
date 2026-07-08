@@ -845,7 +845,7 @@ function renderHUD(){
   const frac = Math.min(1, game.score/CONFIG.targetScore);
   if(frac>0){ ctx.fillStyle=C.orange; rr(ctx,bx,by,Math.max(bh,bw*frac),bh,5); ctx.fill(); }
   ctx.font = "bold 11px 'Segoe UI', Arial"; ctx.textAlign="center"; ctx.fillStyle=C.cream;
-  ctx.fillText(game.unlocked ? CONFIG.discountCode+" UNLOCKED!" : CONFIG.targetScore+" pts = "+CONFIG.discountCode, W/2, by+bh+13);
+  ctx.fillText(game.unlocked ? CONFIG.discountCode+" UNLOCKED!" : "Reach "+CONFIG.targetScore+" pts to unlock your code", W/2, by+bh+13);
 
   // active power-up chips (top-left column)
   let cy = 84;
