@@ -1,0 +1,12 @@
+# Netlify configuration for the Peak Wild static site.
+# No build step — files are served exactly as they are in the repo.
+[build]
+  publish = "."
+
+# Nice-to-have security headers (safe defaults for a static store front).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
