@@ -245,6 +245,15 @@ nav.links .cta::after{display:none}
   box-shadow:3px 3px 0 var(--ink);transition:all .12s ease;white-space:nowrap;
 }
 .buy:hover{background:var(--ember);transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+/* subscribe & save row on product cards */
+.subrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;
+  padding-top:12px;border-top:1px dashed var(--paper-line)}
+.sub-label{font-family:"Oswald",sans-serif;font-size:12px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--forest);font-weight:600;line-height:1.2}
+.sub-buy{font-family:"Oswald",sans-serif;font-size:13px;font-weight:600;letter-spacing:.04em;
+  color:var(--cream);background:var(--forest);padding:8px 14px;border:2px solid var(--ink);border-radius:4px;
+  box-shadow:2px 2px 0 var(--ink);white-space:nowrap;transition:transform .12s ease, box-shadow .12s ease, background .12s ease}
+.sub-buy:hover{background:var(--forest-deep);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
 .center-cta{text-align:center;margin-top:52px}
 
 /* ---------- shop filters ---------- */

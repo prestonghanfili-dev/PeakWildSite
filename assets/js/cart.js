@@ -19,6 +19,13 @@
 const STORE_DOMAIN = "peakwild.myshopify.com";  // Shopify store checkout domain
 const CART_KEY = "pw_cart_v1";
 
+// Subscribe & Save — the Shopify subscription "selling plan" ("Deliver every month").
+// The discount % is set in Shopify; keep `pct` here matched to it so the site never
+// shows a discount that differs from what checkout charges.
+const SUBSCRIPTION = { planId: "6431178995", pct: 17 };
+// Variants NOT on the subscription plan in Shopify — no Subscribe option is shown for these.
+const NO_SUB_VARIANTS = ["49286180405491"]; // Libido Support Strips (add it to the plan in Shopify to enable)
+
 /* ---- state ---------------------------------------------------------- */
 const load = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch (e) { return {}; } };
 const save = c => localStorage.setItem(CART_KEY, JSON.stringify(c));
@@ -166,3 +173,28 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeCart();
 
 // label the buy buttons for their new role
 document.querySelectorAll("a.buy").forEach(b => { if (b.textContent.trim() === "Buy Now") b.textContent = "Add to Cart"; });
+
+// Subscribe & Save — add a subscription option under each product's buy row.
+// The subscribe link goes straight to Shopify's subscription checkout (selling_plan),
+// so it never conflicts with the one-time cart drawer. Products on the plan only.
+function injectSubscribeOptions() {
+  document.querySelectorAll(".prod-card").forEach(card => {
+    const buy = card.querySelector("a.buy");
+    const buyrow = card.querySelector(".buyrow");
+    if (!buy || !buyrow || card.querySelector(".subrow")) return;
+    const m = (buy.getAttribute("href") || "").match(/\/cart\/(\d+):/);
+    const variant = m ? m[1] : null;
+    if (!variant || NO_SUB_VARIANTS.includes(variant)) return;
+    const price = parseFloat((card.querySelector(".price")?.textContent || "0").replace(/[^0-9.]/g, ""));
+    if (!price) return;
+    const subPrice = Math.round(price * (1 - SUBSCRIPTION.pct / 100) * 100) / 100;
+    const url = `https://${STORE_DOMAIN}/cart/${variant}:1?selling_plan=${SUBSCRIPTION.planId}`;
+    const row = document.createElement("div");
+    row.className = "subrow";
+    row.innerHTML =
+      `<span class="sub-label">&#128260; Subscribe &amp; Save ${SUBSCRIPTION.pct}%</span>` +
+      `<a class="sub-buy" href="${url}">${money(subPrice)}/mo &rarr;</a>`;
+    buyrow.insertAdjacentElement("afterend", row);
+  });
+}
+injectSubscribeOptions();
