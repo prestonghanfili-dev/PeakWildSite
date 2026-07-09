@@ -32,7 +32,7 @@ const NO_SUB_VARIANTS = [];
 
 // Free shipping: orders at/over this subtotal ship free (keep matched to Shopify's
 // shipping rule). The cart shows a progress bar nudging shoppers to the threshold.
-const FREE_SHIP_THRESHOLD = 50;
+const FREE_SHIP_THRESHOLD = 70;
 
 /* ---- state ---------------------------------------------------------- */
 const load = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch (e) { return {}; } };
