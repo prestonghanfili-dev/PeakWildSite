@@ -30,6 +30,10 @@ const SUBSCRIPTION = { planId: "6431178995", pct: 17 };
 // (All products are now on the plan, so this is empty.)
 const NO_SUB_VARIANTS = [];
 
+// Free shipping: orders at/over this subtotal ship free (keep matched to Shopify's
+// shipping rule). The cart shows a progress bar nudging shoppers to the threshold.
+const FREE_SHIP_THRESHOLD = 50;
+
 /* ---- state ---------------------------------------------------------- */
 const load = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch (e) { return {}; } };
 const save = c => localStorage.setItem(CART_KEY, JSON.stringify(c));
@@ -71,6 +75,22 @@ function renderBadge() {
   });
 }
 
+// Free-shipping progress bar for the drawer footer. `amount` is what the shopper
+// will actually pay (subscription discount already applied).
+function shipBar(amount) {
+  const remaining = Math.round((FREE_SHIP_THRESHOLD - amount) * 100) / 100;
+  const pct = Math.max(0, Math.min(100, (amount / FREE_SHIP_THRESHOLD) * 100));
+  const unlocked = remaining <= 0;
+  const msg = unlocked
+    ? `🎉 You’ve unlocked <b>free shipping!</b>`
+    : `You’re <b>${money(remaining)}</b> away from <b>free shipping</b>`;
+  return `
+    <div class="ship-bar ${unlocked ? "done" : ""}">
+      <div class="ship-msg">${msg}</div>
+      <div class="ship-track"><div class="ship-fill" style="width:${pct}%"></div></div>
+    </div>`;
+}
+
 function renderDrawer() {
   const body = document.getElementById("cartBody");
   const foot = document.getElementById("cartFoot");
@@ -102,6 +122,7 @@ function renderDrawer() {
   const base = subtotal();
   const total = sub ? Math.round(base * (1 - SUBSCRIPTION.pct / 100) * 100) / 100 : base;
   foot.innerHTML = `
+    ${shipBar(total)}
     <label class="cart-subtoggle ${sub ? "on" : ""}">
       <input type="checkbox" id="cartSubToggle" ${sub ? "checked" : ""}>
       <span class="cst-box">&#128260;</span>
