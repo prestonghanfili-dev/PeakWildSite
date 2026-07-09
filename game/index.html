@@ -100,7 +100,7 @@ src="https://www.facebook.com/tr?id=1720228168986273&ev=PageView&noscript=1"
       <canvas id="legend" width="368" height="140"></canvas>
       <button class="btn" id="playBtn">Hit the Trail</button>
       <div class="howto" style="font-size:12px;opacity:.7;margin-top:14px">
-        Drag / move mouse &nbsp;·&nbsp; &#8592; &#8594; or A&nbsp;D keys &nbsp;·&nbsp; gamepad</div>
+        Drag or move your mouse to catch the good stuff</div>
     </div>
 
     <!-- GAME OVER SCREEN -->
@@ -971,15 +971,8 @@ requestAnimationFrame(loop);
 function pointerX(e){ const rect=cv.getBoundingClientRect(); return (e.clientX-rect.left)/rect.width*W; }
 cv.addEventListener("pointermove", e=>{ if(game.state==="playing") game.targetX = pointerX(e); });
 cv.addEventListener("pointerdown", e=>{ if(game.state==="playing") game.targetX = pointerX(e); });
-window.addEventListener("keydown", e=>{
-  if(e.code==="ArrowLeft"||e.code==="KeyA"){ game.keyDir=-1; e.preventDefault(); }
-  if(e.code==="ArrowRight"||e.code==="KeyD"){ game.keyDir=1; e.preventDefault(); }
-  if(e.code==="Space"||e.code==="Enter"){ if(game.state!=="playing") startGame(); }
-});
-window.addEventListener("keyup", e=>{
-  if((e.code==="ArrowLeft"||e.code==="KeyA") && game.keyDir===-1) game.keyDir=0;
-  if((e.code==="ArrowRight"||e.code==="KeyD") && game.keyDir===1) game.keyDir=0;
-});
+// Mouse/touch only — no keyboard movement, so typing in the win-screen email
+// field is never intercepted. (Gamepad still supported via pollPad.)
 
 /* ---------------------------------------------------------------------
    UI wiring
