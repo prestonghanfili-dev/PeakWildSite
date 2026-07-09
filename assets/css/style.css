@@ -267,6 +267,9 @@ nav.links .cta::after{display:none}
 .chip:hover{background:var(--sand)}
 .chip.on{background:var(--forest);color:var(--cream);box-shadow:3px 3px 0 var(--ink)}
 .prod-card.hide{display:none}
+.sub-banner{text-align:center;background:rgba(46,107,69,.1);border:1.5px dashed var(--forest);
+  border-radius:10px;padding:13px 20px;margin:0 0 34px;font-size:15px;color:var(--forest-deep);line-height:1.5}
+.sub-banner b{color:var(--forest)}
 
 /* ---------- story ---------- */
 .story{position:relative;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);overflow:hidden}
