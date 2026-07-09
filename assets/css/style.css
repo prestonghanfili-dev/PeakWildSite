@@ -427,6 +427,17 @@ footer.site{
 .cart-note{font-size:12.5px;color:rgba(28,28,28,.7);margin-bottom:14px}
 .cart-note a{color:var(--ember-deep);border-bottom:1px solid var(--ember-deep)}
 .cart-secure{text-align:center;font-size:12px;color:rgba(28,28,28,.6);margin-top:12px}
+/* whole-cart subscribe & save toggle */
+.cart-subtoggle{display:flex;align-items:center;gap:12px;cursor:pointer;padding:12px 14px;margin-bottom:14px;
+  border:2px solid var(--ink);border-radius:8px;background:var(--cream);transition:background .15s ease,border-color .15s ease}
+.cart-subtoggle.on{background:rgba(46,107,69,.12);border-color:var(--forest)}
+.cart-subtoggle input{width:20px;height:20px;accent-color:var(--forest);cursor:pointer;flex-shrink:0}
+.cart-subtoggle .cst-box{font-size:18px;line-height:1}
+.cart-subtoggle .cst-text{font-family:"Oswald",sans-serif;font-size:13px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--forest-deep);display:flex;flex-direction:column;gap:1px;line-height:1.2}
+.cart-subtoggle .cst-text small{font-family:"Source Sans 3",sans-serif;font-size:11px;font-weight:400;
+  letter-spacing:0;text-transform:none;color:rgba(28,28,28,.6)}
+.cart-sub s{font-size:14px;color:rgba(28,28,28,.45);font-weight:400;margin-left:6px}
 
 /* ---------- responsive ---------- */
 @media (max-width: 1020px){

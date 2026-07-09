@@ -3,14 +3,17 @@
    Peak Wild — lightweight cart (no dependencies, no API token)
 
    How it works:
-   - "Add to Cart" buttons (.buy) carry a Shopify cart permalink as their
-     href, e.g. https://peakwild.myshopify.com/cart/49286205243635:1
-   - JS intercepts the click, reads the product straight off its card,
-     and stores it in localStorage. A slide-out drawer shows the cart.
-   - Checkout builds ONE Shopify cart permalink for all items and sends the
-     shopper to Shopify's secure hosted checkout.
-   - Progressive enhancement: if JS is disabled or errors, the .buy anchor
-     still works as a normal single-item checkout link.
+   - "Add to Cart" (.buy) and "Subscribe & Save" (.sub-buy) both add the item
+     to a localStorage cart shown in a slide-out drawer.
+   - Shopify applies a subscription "selling plan" to the WHOLE checkout, not
+     per line — so the cart is either an all one-time order or an all
+     Subscribe & Save order, controlled by one toggle in the drawer. Clicking a
+     product's "Subscribe & Save" flips that toggle on.
+   - Checkout builds ONE Shopify cart permalink for all items (adding
+     ?selling_plan=... when the order is a subscription) and sends the shopper
+     to Shopify's secure hosted checkout.
+   - Progressive enhancement: if JS is disabled, .buy / .sub-buy anchors still
+     work as normal single-item (one-time / subscription) checkout links.
 
    Game reward: we deliberately do NOT auto-apply the game's discount code.
    Winners paste their earned code in Shopify's discount box at checkout.
@@ -31,6 +34,11 @@ const NO_SUB_VARIANTS = [];
 const load = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch (e) { return {}; } };
 const save = c => localStorage.setItem(CART_KEY, JSON.stringify(c));
 let cart = load();   // { variantId: {qty, name, price, img} }
+
+// whole-cart subscription mode
+const SUB_KEY = "pw_cart_sub";
+const getSub = () => localStorage.getItem(SUB_KEY) === "1";
+const setSub = b => { localStorage.setItem(SUB_KEY, b ? "1" : "0"); renderDrawer(); };
 
 const count = () => Object.values(cart).reduce((n, i) => n + i.qty, 0);
 const subtotal = () => Object.values(cart).reduce((s, i) => s + i.price * i.qty, 0);
@@ -89,12 +97,23 @@ function renderDrawer() {
         </div>
       </div>
     </div>`).join("");
+
+  const sub = getSub();
+  const base = subtotal();
+  const total = sub ? Math.round(base * (1 - SUBSCRIPTION.pct / 100) * 100) / 100 : base;
   foot.innerHTML = `
-    <div class="cart-sub"><span>Subtotal</span><b>${money(subtotal())}</b></div>
+    <label class="cart-subtoggle ${sub ? "on" : ""}">
+      <input type="checkbox" id="cartSubToggle" ${sub ? "checked" : ""}>
+      <span class="cst-box">&#128260;</span>
+      <span class="cst-text">Subscribe &amp; Save ${SUBSCRIPTION.pct}%<small>Deliver monthly · cancel anytime</small></span>
+    </label>
+    <div class="cart-sub"><span>${sub ? "Monthly total" : "Subtotal"}</span>
+      <b>${money(total)}${sub ? ` <s>${money(base)}</s>` : ""}</b></div>
     <p class="cart-note">Got a code from <a href="/game/">Peak&nbsp;Catch</a>? Enter it at checkout.</p>
-    <button class="btn" id="cartCheckout" style="width:100%;justify-content:center">Checkout on Shopify</button>
+    <button class="btn" id="cartCheckout" style="width:100%;justify-content:center">${sub ? "Subscribe &amp; Checkout" : "Checkout on Shopify"}</button>
     <p class="cart-secure">🔒 Secure checkout powered by Shopify</p>`;
   document.getElementById("cartCheckout").addEventListener("click", checkout);
+  document.getElementById("cartSubToggle").addEventListener("change", e => setSub(e.target.checked));
 }
 
 /* ---- mutations ------------------------------------------------------ */
@@ -108,9 +127,14 @@ function changeQty(v, d) {
   if (!cart[v]) return;
   cart[v].qty += d;
   if (cart[v].qty <= 0) delete cart[v];
+  if (!count()) localStorage.setItem(SUB_KEY, "0");   // empty cart resets the mode
   save(cart); renderBadge(); renderDrawer();
 }
-function removeItem(v) { delete cart[v]; save(cart); renderBadge(); renderDrawer(); }
+function removeItem(v) {
+  delete cart[v];
+  if (!count()) localStorage.setItem(SUB_KEY, "0");
+  save(cart); renderBadge(); renderDrawer();
+}
 
 /* ---- open / close --------------------------------------------------- */
 function openCart() {
@@ -129,7 +153,8 @@ function closeCart() {
 /* ---- checkout ------------------------------------------------------- */
 function checkoutUrl() {
   const parts = Object.entries(cart).map(([v, it]) => `${v}:${it.qty}`).join(",");
-  return `https://${STORE_DOMAIN}/cart/${parts}`;
+  const base = `https://${STORE_DOMAIN}/cart/${parts}`;
+  return getSub() ? `${base}?selling_plan=${SUBSCRIPTION.planId}` : base;
 }
 function checkout() {
   if (!count()) return;
@@ -155,10 +180,12 @@ injectDrawer();
 renderDrawer();
 renderBadge();
 
-// add-to-cart (event delegation; keeps the anchor as a no-JS fallback)
+// add-to-cart (event delegation; keeps the anchors as no-JS fallbacks)
 document.addEventListener("click", e => {
   const buy = e.target.closest("a.buy");
   if (buy) { e.preventDefault(); addItem(productFromButton(buy)); return; }
+  const subBuy = e.target.closest("a.sub-buy");
+  if (subBuy) { e.preventDefault(); addItem(productFromButton(subBuy)); setSub(true); openCart(); return; }
   const open = e.target.closest(".cartbtn");
   if (open) { e.preventDefault(); openCart(); return; }
   // drawer qty controls
@@ -176,8 +203,8 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeCart();
 document.querySelectorAll("a.buy").forEach(b => { if (b.textContent.trim() === "Buy Now") b.textContent = "Add to Cart"; });
 
 // Subscribe & Save — add a subscription option under each product's buy row.
-// The subscribe link goes straight to Shopify's subscription checkout (selling_plan),
-// so it never conflicts with the one-time cart drawer. Products on the plan only.
+// Clicking it adds the item to the cart and flags the order as a subscription
+// (the .sub-buy href stays a valid single-item subscription link for no-JS).
 function injectSubscribeOptions() {
   document.querySelectorAll(".prod-card").forEach(card => {
     const buy = card.querySelector("a.buy");
@@ -194,7 +221,7 @@ function injectSubscribeOptions() {
     row.className = "subrow";
     row.innerHTML =
       `<span class="sub-label">&#128260; Subscribe &amp; Save ${SUBSCRIPTION.pct}%</span>` +
-      `<a class="sub-buy" href="${url}">${money(subPrice)}/mo &rarr;</a>`;
+      `<a class="sub-buy" href="${url}">+ ${money(subPrice)}/mo</a>`;
     buyrow.insertAdjacentElement("afterend", row);
   });
 }
