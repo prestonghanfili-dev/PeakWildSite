@@ -122,6 +122,8 @@ function addItem({ variant, name, price, img }) {
   if (cart[variant]) cart[variant].qty++;
   else cart[variant] = { qty: 1, name, price, img };
   save(cart); renderBadge(); renderDrawer(); openCart();
+  if (window.fbq) fbq("track", "AddToCart",
+    { content_ids: [variant], content_name: name, content_type: "product", value: price, currency: "USD" });
 }
 function changeQty(v, d) {
   if (!cart[v]) return;
@@ -158,6 +160,10 @@ function checkoutUrl() {
 }
 function checkout() {
   if (!count()) return;
+  if (window.fbq) {
+    const val = getSub() ? Math.round(subtotal() * (1 - SUBSCRIPTION.pct / 100) * 100) / 100 : subtotal();
+    fbq("track", "InitiateCheckout", { value: val, currency: "USD", num_items: count() });
+  }
   window.location.href = checkoutUrl();
 }
 
