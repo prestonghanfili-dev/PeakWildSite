@@ -37,6 +37,7 @@ src="https://www.facebook.com/tr?id=1720228168986273&ev=PageView&noscript=1"
     justify-content:center;text-align:center;padding:22px;border-radius:10px;
     background:rgba(16,28,20,.80);backdrop-filter:blur(3px);z-index:5}
   .screen.hidden{display:none}
+  .hidden{display:none!important}   /* generic: hide any element given the "hidden" class (codePanel, lockedNote, emailGate, codeReveal, errors) */
   .kicker{font-size:13px;letter-spacing:.35em;text-transform:uppercase;opacity:.85}
   h1{font-family:"Arial Black","Segoe UI",sans-serif;font-size:54px;line-height:1;
     letter-spacing:.02em;color:var(--cream);text-transform:uppercase;margin:6px 0 2px;
@@ -64,6 +65,13 @@ src="https://www.facebook.com/tr?id=1720228168986273&ev=PageView&noscript=1"
   #codePanel .cp-code{font-family:"Consolas","Courier New",monospace;font-size:30px;font-weight:700;
     color:var(--orange);letter-spacing:.12em;margin:4px 0}
   #codePanel .cp-note{font-size:13px;opacity:.9;margin-bottom:10px}
+  #codePanel .cp-emailmsg{font-size:13px;opacity:.92;margin:2px 0 11px;line-height:1.4}
+  #codePanel #emailInput{width:100%;box-sizing:border-box;font-family:inherit;font-size:16px;
+    text-align:center;padding:11px 12px;margin-bottom:10px;border:2px solid var(--cream);
+    border-radius:8px;background:rgba(255,255,255,.12);color:var(--cream);outline:none}
+  #codePanel #emailInput::placeholder{color:rgba(246,241,227,.5)}
+  #codePanel #emailInput:focus{border-color:var(--orange)}
+  #codePanel .cp-err{font-size:12px;color:#F3A0A0;margin-top:8px}
   #copyBtn{font-size:13px;padding:9px 22px;box-shadow:0 3px 0 var(--orange-dark)}
   #lockedNote{font-size:14px;opacity:.9;max-width:300px;margin:8px 0 12px;line-height:1.45}
   #lockedNote b{color:var(--orange)}
@@ -102,10 +110,19 @@ src="https://www.facebook.com/tr?id=1720228168986273&ev=PageView&noscript=1"
       <div class="newbest hidden" id="newBest">New personal best!</div>
       <div class="sub" id="bestTxt"></div>
       <div id="codePanel" class="hidden">
-        <div class="cp-label">Code Unlocked</div>
-        <div class="cp-code" id="codeTxt"></div>
-        <div class="cp-note" id="codeNote"></div>
-        <button class="btn" id="copyBtn">Copy Code</button>
+        <div id="emailGate">
+          <div class="cp-label">You earned it! 🎉</div>
+          <div class="cp-emailmsg">Where should we send your code? (Plus wild perks &amp; early drops.)</div>
+          <input type="email" id="emailInput" placeholder="you@email.com" autocomplete="email" inputmode="email">
+          <button class="btn" id="unlockBtn">Unlock My Code</button>
+          <div class="cp-err hidden" id="emailErr">Please enter a valid email.</div>
+        </div>
+        <div id="codeReveal" class="hidden">
+          <div class="cp-label">Code Unlocked</div>
+          <div class="cp-code" id="codeTxt"></div>
+          <div class="cp-note" id="codeNote"></div>
+          <button class="btn" id="copyBtn">Copy Code</button>
+        </div>
       </div>
       <div id="lockedNote" class="hidden"></div>
       <div class="btnrow">
@@ -134,6 +151,11 @@ const CONFIG = {
   discountCode: "WILD15",
   discountLabel:"15% OFF your order",
   targetScore:  300,
+
+  // Email capture: fill in your Klaviyo Public API Key (companyId) + a List ID
+  // to gate the reward code behind an email (turns the game into a lead magnet).
+  // Leave blank to reveal the code directly with no email step.
+  klaviyo: { companyId: "", listId: "" },
 
   lives: 1,                 // sudden death — one junk catch ends the run (shield blocks it)
 
@@ -690,6 +712,7 @@ function endGame(){
   $("bestTxt").textContent = "Personal best: " + game.best;
   $("codePanel").classList.toggle("hidden", !game.unlocked);
   $("lockedNote").classList.toggle("hidden", game.unlocked);
+  if(game.unlocked) showReward();
   $("overScreen").classList.remove("hidden");
 }
 
@@ -969,6 +992,40 @@ function startGame(){
 $("playBtn").addEventListener("click", startGame);
 $("againBtn").addEventListener("click", startGame);
 $("shopBtn").addEventListener("click", ()=> window.open(CONFIG.shopUrl,"_blank"));
+
+/* --- email-gated reward: turn a win into a captured lead (Klaviyo) --- */
+const emailGateOn = () => !!(CONFIG.klaviyo && CONFIG.klaviyo.companyId && CONFIG.klaviyo.listId);
+const emailDone   = () => localStorage.getItem("pw_email_captured") === "1";
+function showReward(){
+  const gate = emailGateOn() && !emailDone();
+  $("emailGate").classList.toggle("hidden", !gate);
+  $("codeReveal").classList.toggle("hidden", gate);
+}
+function submitEmail(){
+  const email = $("emailInput").value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ $("emailErr").classList.remove("hidden"); return; }
+  $("emailErr").classList.add("hidden");
+  localStorage.setItem("pw_email_captured","1");
+  subscribeKlaviyo(email);                 // best-effort, non-blocking
+  $("emailGate").classList.add("hidden");  // reveal the code instantly
+  $("codeReveal").classList.remove("hidden");
+}
+function subscribeKlaviyo(email){
+  if(!emailGateOn()) return;
+  const { companyId, listId } = CONFIG.klaviyo;
+  try{
+    fetch("https://a.klaviyo.com/client/subscriptions/?company_id="+encodeURIComponent(companyId), {
+      method:"POST", keepalive:true,
+      headers:{ "Content-Type":"application/json", "revision":"2024-10-15" },
+      body: JSON.stringify({ data:{ type:"subscription",
+        attributes:{ custom_source:"Peak Catch Game",
+          profile:{ data:{ type:"profile", attributes:{ email } } } },
+        relationships:{ list:{ data:{ type:"list", id:listId } } } } })
+    }).catch(()=>{});
+  }catch(e){}
+}
+$("unlockBtn").addEventListener("click", submitEmail);
+$("emailInput").addEventListener("keydown", e => { if(e.key==="Enter"){ e.preventDefault(); submitEmail(); } });
 
 $("copyBtn").addEventListener("click", async ()=>{
   const code = CONFIG.discountCode; let ok=false;
