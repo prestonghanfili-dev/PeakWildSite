@@ -550,6 +550,9 @@ details.faq .a a{color:var(--ember);font-weight:600}
   font-size:clamp(26px,3.4vw,38px);line-height:1.08;letter-spacing:.01em;margin-bottom:18px;color:var(--ink)}
 .pdp-card{padding:22px;box-shadow:4px 4px 0 rgba(28,28,28,.14)}
 .pdp-card:hover{transform:none}
+/* cart.js reads these (name/image) but they must stay hidden — the global
+   img{display:block} defeats the plain [hidden] attribute, so hide explicitly */
+.pdp-card > img, .pdp-card > h3{display:none}
 .pdp-card .buyrow{margin-top:0}
 .pdp-card .buy{padding:13px 30px;font-size:14.5px}
 .pdp-trust{font-size:13px;color:rgba(28,28,28,.72);margin-top:16px;line-height:1.6}
