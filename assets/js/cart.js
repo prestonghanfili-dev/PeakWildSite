@@ -47,9 +47,16 @@ const money = n => "$" + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/,
 
 // Single-product subscription checkout URL (this is what actually attaches the
 // selling plan + discount at checkout — verified against the live store).
-const subCheckoutUrl = (variant, qty = 1) =>
-  `https://${STORE_DOMAIN}/cart/add?id=${variant}&quantity=${qty}` +
-  `&selling_plan=${SUBSCRIPTION.planId}&return_to=/checkout`;
+const subCheckoutUrl = (variant, qty = 1) => {
+  // A per-product subscription must check out with ONLY this item. /cart/add
+  // APPENDS to the persistent Shopify server cart, so without clearing first,
+  // stale items from earlier subscribe clicks pile up at checkout. /cart/clear
+  // honors return_to (verified against the live store), so we chain:
+  //   clear the cart -> add just this item (with its plan) -> go to checkout.
+  const add = `/cart/add?id=${variant}&quantity=${qty}` +
+    `&selling_plan=${SUBSCRIPTION.planId}&return_to=/checkout`;
+  return `https://${STORE_DOMAIN}/cart/clear?return_to=${encodeURIComponent(add)}`;
+};
 
 /* ---- drawer markup, injected once ----------------------------------- */
 function injectDrawer() {
