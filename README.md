@@ -28,7 +28,7 @@ checkout will fail until you make it public:
 Shopify admin → **Online Store → Preferences → scroll to “Password protection” → uncheck it.**
 (Your store already sells this way through Shopify — this just lets the checkout URL open.)
 
-**2. Create the `WILD15` discount code** (15% off) in Shopify admin → Discounts,
+**2. Create the `WILD10` discount code** (10% off) in Shopify admin → Discounts,
 so the Peak Catch game reward works at checkout.
 
 ## How checkout works (no API keys)
