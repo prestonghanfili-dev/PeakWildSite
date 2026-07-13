@@ -166,9 +166,16 @@ function closeCart() {
 }
 
 /* ---- checkout (one-time, multi-item) -------------------------------- */
+// Optional discount auto-applied at checkout, ONLY when a page opts in via
+// window.PW_DISCOUNT (e.g. a paid landing page). Pages that don't set it are
+// unchanged — the game-reward code stays "paste it at checkout" everywhere else.
+function discountQuery() {
+  const code = (typeof window !== "undefined" && window.PW_DISCOUNT ? String(window.PW_DISCOUNT) : "").trim();
+  return code ? `?discount=${encodeURIComponent(code)}` : "";
+}
 function checkoutUrl() {
   const parts = Object.entries(cart).map(([v, it]) => `${v}:${it.qty}`).join(",");
-  return `https://${STORE_DOMAIN}/cart/${parts}`;
+  return `https://${STORE_DOMAIN}/cart/${parts}${discountQuery()}`;
 }
 function checkout() {
   if (!count()) return;
