@@ -128,11 +128,44 @@ nav.links .cta::after{display:none}
 .hero h1 .strong{color:var(--ember)}
 .hero p.lede{font-size:19px;max-width:480px;margin:18px 0 30px;color:rgba(28,28,28,.85)}
 .hero .actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
-.hero .promo-pill{
-  display:inline-flex;align-items:center;gap:8px;margin-top:18px;
-  font-family:"Oswald",sans-serif;font-size:13px;letter-spacing:.12em;text-transform:uppercase;
-  background:rgba(46,107,69,.12);border:1.5px dashed var(--forest);border-radius:30px;
-  padding:8px 18px;color:var(--forest-deep);
+/* game CTA — styled as a tear-off coupon/ticket */
+.hero .promo-ticket{
+  position:relative;display:inline-flex;align-items:center;gap:13px;margin-top:20px;
+  padding:11px 18px;background:var(--card);color:var(--ink);
+  border:2px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);
+  transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
+}
+.hero .promo-ticket::before{                 /* dashed inner line = coupon motif */
+  content:"";position:absolute;inset:3px;border:1.5px dashed rgba(46,107,69,.45);
+  border-radius:7px;pointer-events:none;
+}
+.hero .promo-ticket:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);background:#fff}
+.hero .promo-ticket:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.hero .promo-ticket:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.hero .pt-icon{
+  display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+  width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);
+  border:2px solid var(--ink);font-size:13px;line-height:1;padding-left:2px;
+}
+.hero .pt-copy{display:flex;flex-direction:column;line-height:1.15;text-align:left}
+.hero .pt-kicker{
+  font-family:"Oswald",sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--forest);
+}
+.hero .pt-prize{
+  font-family:"Oswald",sans-serif;font-size:15px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;margin-top:2px;
+}
+.hero .pt-prize b{color:var(--ember-deep);font-weight:800}
+.hero .pt-arrow{
+  font-family:"Oswald",sans-serif;font-size:17px;color:var(--ember);margin-left:2px;
+  transition:transform .18s ease;
+}
+.hero .promo-ticket:hover .pt-arrow{transform:translateX(4px)}
+@media (prefers-reduced-motion:reduce){
+  .hero .promo-ticket,.hero .pt-arrow{transition:none}
+  .hero .promo-ticket:hover{transform:none}
+  .hero .promo-ticket:hover .pt-arrow{transform:none}
 }
 .trust{display:flex;gap:34px;margin-top:38px;flex-wrap:wrap}
 .trust div{display:flex;flex-direction:column;gap:2px}
