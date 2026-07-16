@@ -631,3 +631,11 @@ details.faq .a a{color:var(--ember);font-weight:600}
 .pdp-bar .buy{margin-left:auto;background:var(--ember);color:var(--cream);padding:13px 24px;font-size:14px}
 .pdp-bar .buy:hover{background:var(--ember-deep)}
 @media (max-width:860px){ .pdp-bar{display:flex} }
+
+/* ================= footer social links ================= */
+.foot-social{display:flex;gap:12px;margin-top:20px}
+.foot-social a{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;
+  border:2px solid rgba(246,232,210,.3);border-radius:8px;color:rgba(246,232,210,.85);
+  transition:transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease}
+.foot-social a:hover{background:var(--sun);color:var(--forest-deep);border-color:var(--sun);transform:translateY(-3px)}
+.foot-social svg{width:19px;height:19px;fill:currentColor;display:block}
