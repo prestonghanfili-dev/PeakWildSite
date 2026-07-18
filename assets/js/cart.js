@@ -27,10 +27,22 @@ const STORE_DOMAIN = "peakwild.myshopify.com";  // Shopify store checkout domain
 const CART_KEY = "pw_cart_v1";
 
 // Subscribe & Save — the Shopify subscription "selling plan" ("Deliver every month").
-// Keep `pct` matched to the discount set on the plan in Shopify.
+// DEFAULT only. Products can sit on DIFFERENT selling plans with different
+// discounts (e.g. Shilajit is on a 28%-off plan while the rest are on 17%), so
+// each product card carries its own data-selling-plan / data-sub-pct written by
+// scratchpad gen_subs.py from the live store. Sending the wrong plan id makes
+// Shopify fail with "Cannot apply selling plan to variant" — so always prefer
+// the per-card values and treat these as a fallback.
 const SUBSCRIPTION = { planId: "6431178995", pct: 17 };
-// Variants NOT on the subscription plan in Shopify — no Subscribe option is shown.
+// Variants NOT on any subscription plan in Shopify — no Subscribe option shown.
 const NO_SUB_VARIANTS = [];
+
+// Read a card's own plan/discount, falling back to the store default.
+const planOf = card => (card && card.dataset.sellingPlan) || SUBSCRIPTION.planId;
+const pctOf  = card => {
+  const p = parseFloat(card && card.dataset.subPct);
+  return isNaN(p) ? SUBSCRIPTION.pct : p;
+};
 
 // Free shipping: orders at/over this subtotal ship free (keep matched to Shopify's
 // shipping rule). The cart shows a progress bar nudging shoppers to the threshold.
@@ -47,14 +59,14 @@ const money = n => "$" + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/,
 
 // Single-product subscription checkout URL (this is what actually attaches the
 // selling plan + discount at checkout — verified against the live store).
-const subCheckoutUrl = (variant, qty = 1) => {
+const subCheckoutUrl = (variant, qty = 1, planId = SUBSCRIPTION.planId) => {
   // A per-product subscription must check out with ONLY this item. /cart/add
   // APPENDS to the persistent Shopify server cart, so without clearing first,
   // stale items from earlier subscribe clicks pile up at checkout. /cart/clear
   // honors return_to (verified against the live store), so we chain:
   //   clear the cart -> add just this item (with its plan) -> go to checkout.
   const add = `/cart/add?id=${variant}&quantity=${qty}` +
-    `&selling_plan=${SUBSCRIPTION.planId}&return_to=/checkout`;
+    `&selling_plan=${planId}&return_to=/checkout`;
   return `https://${STORE_DOMAIN}/cart/clear?return_to=${encodeURIComponent(add)}`;
 };
 
@@ -252,12 +264,13 @@ function injectSubscribeOptions() {
     if (!variant || NO_SUB_VARIANTS.includes(variant)) return;
     const price = parseFloat((card.querySelector(".price")?.textContent || "0").replace(/[^0-9.]/g, ""));
     if (!price) return;
-    const subPrice = Math.round(price * (1 - SUBSCRIPTION.pct / 100) * 100) / 100;
+    const pct = pctOf(card), plan = planOf(card);
+    const subPrice = Math.round(price * (1 - pct / 100) * 100) / 100;
     const row = document.createElement("div");
     row.className = "subrow";
     row.innerHTML =
-      `<span class="sub-label">&#128260; Subscribe &amp; Save ${SUBSCRIPTION.pct}%</span>` +
-      `<a class="sub-buy" href="${subCheckoutUrl(variant, 1)}">+ ${money(subPrice)}/mo</a>`;
+      `<span class="sub-label">&#128260; Subscribe &amp; Save ${pct}%</span>` +
+      `<a class="sub-buy" href="${subCheckoutUrl(variant, 1, plan)}">+ ${money(subPrice)}/mo</a>`;
     buyrow.insertAdjacentElement("afterend", row);
   });
 }
