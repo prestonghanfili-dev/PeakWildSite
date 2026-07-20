@@ -698,15 +698,27 @@ details.faq .a a{color:var(--ember);font-weight:600}
   background:var(--forest-deep);color:var(--cream);padding:16px 22px;border-bottom:2px solid var(--ink)}
 .lab-head h3{font-family:"Oswald",sans-serif;font-size:17px;letter-spacing:.1em;text-transform:uppercase;color:var(--cream);margin:0}
 .lab-lot{font-family:"Oswald",sans-serif;font-size:12.5px;letter-spacing:.08em;color:var(--sun);text-transform:uppercase}
-.lab-body{padding:22px}
-.lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.lab-block h4{font-family:"Oswald",sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ember-deep);margin:0 0 10px;padding-bottom:8px;border-bottom:1px dashed var(--paper-line)}
-.lab-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:14.5px;
-  border-bottom:1px dotted rgba(28,28,28,.12)}
-.lab-row:last-child{border-bottom:0}
-.lab-row .v{font-family:"Oswald",sans-serif;font-weight:600;white-space:nowrap}
-.lab-row .pass{color:var(--forest);font-weight:700}
+/* certificate-style meta block */
+.lab-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:18px 22px;
+  border-bottom:2px solid var(--ink);background:var(--card)}
+.lab-meta div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.lab-meta span{font-family:"Oswald",sans-serif;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(28,28,28,.55)}
+.lab-meta b{font-family:"Oswald",sans-serif;font-size:14.5px;letter-spacing:.02em;color:var(--ink)}
+
+/* certificate-style ANALYSIS / RESULTS table */
+.lab-table{width:100%;border-collapse:collapse;font-size:14.5px}
+.lab-table thead th{background:var(--ink);color:var(--cream);text-align:left;
+  font-family:"Oswald",sans-serif;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  padding:11px 22px;font-weight:600}
+.lab-table td{padding:10px 22px;border-bottom:1px solid rgba(28,28,28,.12);vertical-align:top}
+.lab-table tr:last-child td{border-bottom:0}
+.lab-table .lab-val{font-family:"Oswald",sans-serif;font-weight:600;white-space:nowrap;width:42%}
+.lab-table .lab-val .ok{color:var(--forest);font-weight:800}
+.lab-table i{font-style:italic;color:rgba(28,28,28,.62)}
+.lab-band td{background:rgba(46,107,69,.13);font-family:"Oswald",sans-serif;font-weight:700;
+  font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-deep);
+  border-bottom:1px solid rgba(28,28,28,.18)}
 .lab-foot{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
   padding:16px 22px;border-top:2px solid var(--ink);background:var(--card)}
 .lab-note{font-size:12.5px;color:rgba(28,28,28,.7);max-width:520px;line-height:1.5;margin:0}
@@ -718,7 +730,9 @@ details.faq .a a{color:var(--ember);font-weight:600}
 .lab-btn:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
 @media (max-width:720px){
   .lab{padding:56px 0}
-  .lab-grid{grid-template-columns:1fr;gap:18px}
+  .lab-meta{grid-template-columns:repeat(2,1fr);gap:14px}
+  .lab-table td,.lab-table thead th{padding-left:16px;padding-right:16px}
+  .lab-table .lab-val{width:38%}
   .lab-foot{flex-direction:column;align-items:stretch}
   .lab-btn{justify-content:center}
 }
