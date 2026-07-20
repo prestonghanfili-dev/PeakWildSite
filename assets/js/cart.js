@@ -44,9 +44,8 @@ const pctOf  = card => {
   return isNaN(p) ? SUBSCRIPTION.pct : p;
 };
 
-// Free shipping: orders at/over this subtotal ship free (keep matched to Shopify's
-// shipping rule). The cart shows a progress bar nudging shoppers to the threshold.
-const FREE_SHIP_THRESHOLD = 70;
+// Free shipping applies to every order (no minimum) — matched to Shopify's
+// shipping rule. The cart just confirms it; there's no threshold to chase.
 
 /* ---- state ---------------------------------------------------------- */
 const load = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch (e) { return {}; } };
@@ -97,18 +96,12 @@ function renderBadge() {
   });
 }
 
-// Free-shipping progress bar for the drawer footer.
-function shipBar(amount) {
-  const remaining = Math.round((FREE_SHIP_THRESHOLD - amount) * 100) / 100;
-  const pct = Math.max(0, Math.min(100, (amount / FREE_SHIP_THRESHOLD) * 100));
-  const unlocked = remaining <= 0;
-  const msg = unlocked
-    ? `🎉 You’ve unlocked <b>free shipping!</b>`
-    : `You’re <b>${money(remaining)}</b> away from <b>free shipping</b>`;
+// Free shipping applies to every order now, so this is a simple reassurance
+// banner in the drawer footer (no threshold, no progress bar).
+function shipBar() {
   return `
-    <div class="ship-bar ${unlocked ? "done" : ""}">
-      <div class="ship-msg">${msg}</div>
-      <div class="ship-track"><div class="ship-fill" style="width:${pct}%"></div></div>
+    <div class="ship-bar done">
+      <div class="ship-msg">🎉 <b>Free shipping</b> on every order — no minimum</div>
     </div>`;
 }
 
@@ -141,7 +134,7 @@ function renderDrawer() {
 
   const total = subtotal();
   foot.innerHTML = `
-    ${shipBar(total)}
+    ${shipBar()}
     <div class="cart-sub"><span>Subtotal</span><b>${money(total)}</b></div>
     <p class="cart-note">🔄 Want it monthly? Use <b>Subscribe &amp; Save</b> on any product for ${SUBSCRIPTION.pct}% off.
       Got a code from <a href="/game/">Peak&nbsp;Catch</a>? Enter it at checkout.</p>
