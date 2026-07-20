@@ -191,10 +191,16 @@ nav.links .cta::after{display:none}
   border:3px solid var(--ink);border-radius:8px;box-shadow:var(--shadow);
   background:var(--card);
 }
+/* Two translucent "washi tape" pieces at the poster's top corners — reads as a
+   poster actually taped up, not a flat printed bar. No hard border; a soft
+   sheen + shadow gives it real-tape translucency. */
 .poster .tape{
-  position:absolute;width:120px;height:32px;background:rgba(233,161,59,.75);
-  border:1px solid rgba(28,28,28,.2);left:50%;top:-16px;transform:translateX(-50%) rotate(-3deg);
+  position:absolute;top:-11px;width:78px;height:22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(28,28,28,.06)),rgba(244,230,205,.56);
+  box-shadow:0 2px 5px rgba(28,28,28,.13);
 }
+.poster .tape-l{left:6%;transform:rotate(-8deg)}
+.poster .tape-r{right:6%;transform:rotate(6deg)}
 .poster .stamp{
   position:absolute;right:-24px;bottom:26px;transform:rotate(-12deg);
   font-family:"Oswald",sans-serif;font-weight:700;font-size:13px;letter-spacing:.2em;
@@ -451,9 +457,17 @@ main.shop-main{padding-bottom:100px}
 
 /* ---------- footer ---------- */
 footer.site{
+  position:relative;overflow:hidden;
   background:var(--forest-deep);color:var(--cream);
   border-top:2px solid var(--ink);padding:70px 0 34px;
 }
+/* faint mountain range across the top of the footer — ties the whole site into
+   one wilderness world. CSS-only so it lands on every page's footer. */
+footer.site::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:60px;pointer-events:none;opacity:.5;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='60'%3E%3Cpath fill='%232E6B45' d='M0 60 L0 34 L150 44 L300 26 L470 46 L640 28 L800 46 L900 34 L900 60 Z'/%3E%3C/svg%3E") repeat-x top;
+}
+footer.site .wrap{position:relative;z-index:1}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:50px}
 .foot-grid .name{font-family:"Rye",serif;font-size:30px;color:var(--cream)}
 .foot-grid .sub{font-family:"Oswald",sans-serif;font-size:10px;letter-spacing:.5em;color:var(--sun)}
