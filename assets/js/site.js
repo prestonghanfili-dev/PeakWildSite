@@ -49,3 +49,6 @@ chips.forEach(chip => chip.addEventListener("click", () => {
     card.classList.toggle("hide", want !== "all" && !cats.includes(want));
   });
 }));
+
+// Footer copyright: keep the end year current (shows "© 2024–<this year>").
+document.querySelectorAll(".cyear").forEach(el => { el.textContent = new Date().getFullYear(); });
