@@ -690,6 +690,39 @@ details.faq .a a{color:var(--ember);font-weight:600}
 .pdp-bar .buy:hover{background:var(--ember-deep)}
 @media (max-width:860px){ .pdp-bar{display:flex} }
 
+/* ================= lab results (COA) ================= */
+.lab{background:var(--card);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:76px 0}
+.lab-panel{max-width:900px;margin:0 auto;background:var(--cream);border:2px solid var(--ink);border-radius:12px;
+  box-shadow:6px 6px 0 rgba(28,28,28,.16);overflow:hidden}
+.lab-head{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
+  background:var(--forest-deep);color:var(--cream);padding:16px 22px;border-bottom:2px solid var(--ink)}
+.lab-head h3{font-family:"Oswald",sans-serif;font-size:17px;letter-spacing:.1em;text-transform:uppercase;color:var(--cream);margin:0}
+.lab-lot{font-family:"Oswald",sans-serif;font-size:12.5px;letter-spacing:.08em;color:var(--sun);text-transform:uppercase}
+.lab-body{padding:22px}
+.lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.lab-block h4{font-family:"Oswald",sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ember-deep);margin:0 0 10px;padding-bottom:8px;border-bottom:1px dashed var(--paper-line)}
+.lab-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:14.5px;
+  border-bottom:1px dotted rgba(28,28,28,.12)}
+.lab-row:last-child{border-bottom:0}
+.lab-row .v{font-family:"Oswald",sans-serif;font-weight:600;white-space:nowrap}
+.lab-row .pass{color:var(--forest);font-weight:700}
+.lab-foot{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
+  padding:16px 22px;border-top:2px solid var(--ink);background:var(--card)}
+.lab-note{font-size:12.5px;color:rgba(28,28,28,.7);max-width:520px;line-height:1.5;margin:0}
+.lab-btn{display:inline-flex;align-items:center;gap:9px;font-family:"Oswald",sans-serif;font-weight:600;
+  font-size:14px;letter-spacing:.1em;text-transform:uppercase;background:var(--forest);color:var(--cream);
+  padding:13px 22px;border:2px solid var(--ink);border-radius:6px;box-shadow:3px 3px 0 var(--ink);
+  white-space:nowrap;transition:transform .12s ease, box-shadow .12s ease, background .12s ease}
+.lab-btn:hover{background:var(--forest-deep);transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.lab-btn:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+@media (max-width:720px){
+  .lab{padding:56px 0}
+  .lab-grid{grid-template-columns:1fr;gap:18px}
+  .lab-foot{flex-direction:column;align-items:stretch}
+  .lab-btn{justify-content:center}
+}
+
 /* ================= footer social links ================= */
 .foot-social{display:flex;gap:12px;margin-top:20px}
 .foot-social a{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;
