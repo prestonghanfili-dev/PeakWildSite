@@ -335,25 +335,33 @@ nav.links .cta::after{display:none}
 .chip:hover{background:var(--sand)}
 .chip.on{background:var(--forest);color:var(--cream);box-shadow:3px 3px 0 var(--ink)}
 .prod-card.hide{display:none}
-/* The "Save up to 28%" chip is a gold COUPON SEAL — deliberately not styled like
-   the ember/forest action buttons (no offset shadow), so it reads as a value
-   stamp rather than a clickable control that competes with the real buy CTAs. */
-.sub-banner{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;
-  background:var(--forest);color:var(--cream);border:2px solid var(--ink);border-radius:12px;
-  box-shadow:5px 5px 0 var(--ink);padding:20px 30px;margin:0 0 40px;position:relative;overflow:hidden}
-.sub-banner::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--sun)}
-.sb-badge{display:inline-flex;align-items:center;gap:9px;flex-shrink:0;
-  font-family:"Oswald",sans-serif;font-weight:700;font-size:15px;letter-spacing:.07em;text-transform:uppercase;
-  background:var(--sun);color:var(--ink);border:2px dashed var(--ink);border-radius:9px;
-  padding:11px 18px;white-space:nowrap}
-.sb-badge svg{display:block}
-.sb-text{margin:0;font-size:15.5px;line-height:1.55;max-width:640px;text-align:left;color:var(--cream)}
-.sb-text b{font-family:"Oswald",sans-serif;font-weight:700;letter-spacing:.02em;color:var(--sun)}
-.sb-joke{display:block;font-style:italic;font-size:12.5px;opacity:.82;margin-top:4px}
+/* Subscribe & Save value strip — a vintage "wild club" emblem, not a button:
+   a big gold serif payoff number (28%) sits over a sunburst + mountain scene,
+   with a faint recurring-arrow watermark reinforcing the subscription idea. */
+.sub-banner{position:relative;overflow:hidden;isolation:isolate;
+  display:flex;align-items:center;gap:34px;flex-wrap:wrap;
+  background:var(--forest);color:var(--cream);border:2px solid var(--ink);border-radius:14px;
+  box-shadow:6px 6px 0 var(--ink);padding:22px 36px;margin:0 0 44px}
+.sub-banner::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--sun);z-index:2}
+.sb-scene{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.sb-hero{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;
+  flex-shrink:0;min-width:200px;line-height:.9;text-align:center}
+.sb-up{font-family:"Oswald",sans-serif;font-weight:600;font-size:15px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--cream);margin-bottom:3px}
+.sb-big{font-family:"Rye",serif;font-size:78px;line-height:.82;color:var(--sun);
+  text-shadow:3px 3px 0 var(--ink)}
+.sb-big .sb-pct{font-size:46px;margin-left:1px}
+.sb-on{font-family:"Oswald",sans-serif;font-weight:600;font-size:14px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--sun);margin-top:6px}
+.sb-body{position:relative;z-index:1;max-width:520px}
+.sb-text{margin:0;font-size:16px;line-height:1.6;color:var(--cream)}
+.sb-text b{font-family:"Oswald",sans-serif;font-weight:700;font-size:17px;letter-spacing:.02em;color:var(--sun)}
+.sb-joke{display:block;font-style:italic;font-size:13px;opacity:.85;margin-top:7px}
 @media (max-width:640px){
-  .sub-banner{gap:14px;padding:18px 20px;box-shadow:4px 4px 0 var(--ink)}
-  .sb-badge{font-size:14px;padding:10px 15px}
-  .sb-text{font-size:14px;text-align:center}
+  .sub-banner{flex-direction:column;text-align:center;gap:14px;padding:24px 20px;box-shadow:5px 5px 0 var(--ink)}
+  .sb-big{font-size:66px}
+  .sb-body{max-width:none}
+  .sb-text{text-align:center;font-size:15px}
 }
 
 /* ---------- story ---------- */
