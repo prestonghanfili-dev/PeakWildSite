@@ -269,8 +269,12 @@ function injectSubscribeOptions() {
     const row = document.createElement("div");
     row.className = "subrow";
     row.innerHTML =
-      `<span class="sub-label">&#128260; Subscribe &amp; Save ${pct}%</span>` +
-      `<a class="sub-buy" href="${subCheckoutUrl(variant, 1, plan)}">+ ${money(subPrice)}/mo</a>`;
+      `<div class="sub-info">` +
+        `<span class="sub-label">&#128260; Subscribe &amp; Save ${pct}%</span>` +
+        `<span class="sub-note">Your best price &middot; skip or cancel anytime</span>` +
+      `</div>` +
+      `<a class="sub-buy" href="${subCheckoutUrl(variant, 1, plan)}">` +
+        `${money(subPrice)}<span class="sub-per">/mo</span></a>`;
     buyrow.insertAdjacentElement("afterend", row);
   });
 }

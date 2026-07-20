@@ -279,14 +279,36 @@ nav.links .cta::after{display:none}
 }
 .buy:hover{background:var(--ember);transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
 /* subscribe & save row on product cards */
-.subrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;
-  padding-top:12px;border-top:1px dashed var(--paper-line)}
-.sub-label{font-family:"Oswald",sans-serif;font-size:12px;letter-spacing:.05em;text-transform:uppercase;
-  color:var(--forest);font-weight:600;line-height:1.2}
-.sub-buy{font-family:"Oswald",sans-serif;font-size:13px;font-weight:600;letter-spacing:.04em;
-  color:var(--cream);background:var(--forest);padding:8px 14px;border:2px solid var(--ink);border-radius:4px;
-  box-shadow:2px 2px 0 var(--ink);white-space:nowrap;transition:transform .12s ease, box-shadow .12s ease, background .12s ease}
-.sub-buy:hover{background:var(--forest-deep);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+/* Subscribe & Save — this is the deal we most want people to take, so it reads
+   as a highlighted "best value" panel rather than a cramped afterthought. */
+.subrow{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  margin-top:16px;padding:14px 16px;background:rgba(46,107,69,.10);
+  border:2px solid var(--forest);border-radius:10px;position:relative}
+.sub-info{display:flex;flex-direction:column;gap:3px;line-height:1.2}
+.sub-label{font-family:"Oswald",sans-serif;font-size:15px;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--forest-deep);font-weight:700;line-height:1.2}
+.sub-note{font-size:12.5px;color:rgba(28,28,28,.65);letter-spacing:0;text-transform:none}
+.sub-buy{display:inline-flex;align-items:baseline;gap:3px;
+  font-family:"Oswald",sans-serif;font-size:18px;font-weight:700;letter-spacing:.02em;
+  color:var(--cream);background:var(--forest);padding:13px 22px;border:2px solid var(--ink);border-radius:6px;
+  box-shadow:3px 3px 0 var(--ink);white-space:nowrap;
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease}
+.sub-buy .sub-per{font-size:12px;font-weight:600;opacity:.85}
+.sub-buy:hover{background:var(--forest-deep);transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.sub-buy:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+.sub-buy:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+
+/* extra prominence on the product page, where the decision actually happens */
+.pdp-card .subrow{margin-top:18px;padding:16px 18px;box-shadow:4px 4px 0 rgba(46,107,69,.22)}
+.pdp-card .sub-label{font-size:16px}
+.pdp-card .sub-buy{font-size:20px;padding:15px 26px}
+
+/* stack on narrow cards/phones so the button is full-width and easy to hit */
+@media (max-width:520px){
+  .subrow{flex-direction:column;align-items:stretch;gap:12px;text-align:center}
+  .sub-info{align-items:center}
+  .sub-buy{justify-content:center;width:100%;font-size:19px;padding:15px 20px}
+}
 .center-cta{text-align:center;margin-top:52px}
 
 /* ---------- shop filters ---------- */
