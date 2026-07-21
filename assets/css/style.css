@@ -666,8 +666,15 @@ details.faq .a a{color:var(--ember);font-weight:600}
 .pdp-desc a{color:var(--ember);font-weight:600}
 .pdp-desc img{height:74px;width:auto;display:inline-block;margin:10px 12px 0 0;vertical-align:middle}
 @media (max-width: 820px){
-  .pdp-grid{grid-template-columns:1fr;gap:30px}
-  .pdp-main{max-width:440px}
+  .pdp{padding:16px 0 84px}
+  .pdp-grid{grid-template-columns:1fr;gap:22px}
+  /* Cap the hero image (and drop the thumbnail strip) so the hook, benefits and
+     buy button all reach the first screen — visitors were bouncing at ~13%
+     scroll, never seeing them. The facts thumbnail still lives in the gallery
+     on desktop; on mobile the full label sits in the description below. */
+  .pdp-main{width:auto;max-width:100%;height:210px;aspect-ratio:auto;margin:0 auto}
+  .pdp-gallery{text-align:center}
+  .pdp-thumbs{display:none}
 }
 
 /* ================= PDP conversion upgrade ================= */
@@ -682,7 +689,12 @@ details.faq .a a{color:var(--ember);font-weight:600}
 
 /* benefit sub-headline under product title */
 .pdp-subhead{font-family:"Oswald",sans-serif;font-weight:600;text-transform:none;letter-spacing:.01em;
-  font-size:clamp(17px,2.2vw,21px);line-height:1.25;color:var(--ember-deep);margin:-6px 0 12px}
+  font-size:clamp(17px,2.2vw,21px);line-height:1.25;color:var(--ember-deep);margin:-2px 0 14px}
+/* comedic voice bits */
+.pdp-eyebrow{display:inline-block;font-family:"Oswald",sans-serif;font-weight:700;font-size:12.5px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--ember);margin-bottom:9px}
+.pdp-quip{font-size:12.5px;font-style:italic;color:rgba(28,28,28,.6);margin-top:10px}
+.pdp-lede{font-size:16.5px;line-height:1.62;font-weight:500;color:var(--ink);margin:0 0 16px}
 
 /* rating under title */
 .pdp-rating{display:flex;align-items:center;gap:9px;margin:-4px 0 16px;font-family:"Oswald",sans-serif;font-size:14px}
