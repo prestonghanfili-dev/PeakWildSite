@@ -418,10 +418,17 @@ nav.links .cta::after{display:none}
 .gamecta .btn:hover{background:var(--ink)}
 
 /* ---------- science page ---------- */
-.sci-hero{padding:80px 0 60px;text-align:center}
+.sci-hero{position:relative;overflow:hidden;padding:80px 0 60px;text-align:center;
+  background:url("/assets/img/science-hero.webp") center/cover no-repeat;
+  border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+/* apothecary specimens sit low in the art, so wash a touch heavier at the
+   bottom to keep the stat numbers legible */
+.sci-hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(246,232,210,.87) 0%,rgba(246,232,210,.68) 50%,rgba(246,232,210,.6) 100%)}
+.sci-hero .wrap{position:relative;z-index:1}
 .sci-hero h1{font-size:clamp(36px,5vw,58px);margin-top:14px}
 .sci-hero h1 .fancy{font-family:"Rye",serif;font-weight:400;text-transform:none;color:var(--forest-deep)}
-.sci-hero p{max-width:640px;margin:18px auto 0;color:rgba(28,28,28,.75)}
+.sci-hero p{max-width:640px;margin:18px auto 0;color:rgba(28,28,28,.82)}
 .sci-stats{display:flex;justify-content:center;gap:60px;margin-top:44px;flex-wrap:wrap}
 .sci-stats b{font-family:"Oswald",sans-serif;font-size:42px;color:var(--ember);display:block;text-align:center}
 .sci-stats small{font-family:"Oswald",sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:rgba(28,28,28,.6)}
