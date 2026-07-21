@@ -439,10 +439,18 @@ nav.links .cta::after{display:none}
 .study a:hover,.sci-block .prodlink:hover{color:var(--ember);border-color:var(--ember)}
 
 /* ---------- page hero (shop/science) ---------- */
-.page-hero{padding:70px 0 50px;text-align:center}
+.page-hero{position:relative;overflow:hidden;padding:76px 0 68px;text-align:center;
+  background:url("/assets/img/shop-hero.webp") center/cover no-repeat;
+  border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+/* cream wash so the vintage wilderness art shows through but text stays crisp —
+   heavier at the top behind the heading, lighter at the bottom so the forest
+   and the little Sasquatch on the ridge keep their punch */
+.page-hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(246,232,210,.85) 0%,rgba(246,232,210,.6) 48%,rgba(246,232,210,.34) 100%)}
+.page-hero .wrap{position:relative;z-index:1}
 .page-hero h1{font-size:clamp(36px,5vw,58px);margin-top:14px}
 .page-hero h1 .fancy{font-family:"Rye",serif;font-weight:400;text-transform:none;color:var(--forest-deep)}
-.page-hero p{max-width:620px;margin:16px auto 0;color:rgba(28,28,28,.75)}
+.page-hero p{max-width:620px;margin:16px auto 0;color:rgba(28,28,28,.82)}
 main.shop-main{padding-bottom:100px}
 
 /* ---------- footer ---------- */
