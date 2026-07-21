@@ -129,7 +129,12 @@ nav.links .cta::after{display:none}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ---------- hero ---------- */
-.hero{padding:84px 0 70px;position:relative;overflow:hidden}
+.hero{padding:84px 0 70px;position:relative;overflow:hidden;
+  background:url("/assets/img/shop-hero.webp") center/cover no-repeat}
+/* faint wilderness backdrop — ties the home hero to the shop hero without
+   fighting the Sasquatch poster; a heavy cream wash keeps all the text crisp */
+.hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(246,232,210,.9) 0%,rgba(246,232,210,.83) 55%,rgba(246,232,210,.93) 100%)}
 .hero::after{ /* faint sun rays */
   content:"";position:absolute;right:-160px;top:-160px;width:640px;height:640px;border-radius:50%;
   background:radial-gradient(circle, rgba(233,161,59,.28), transparent 65%);
@@ -206,7 +211,8 @@ nav.links .cta::after{display:none}
 .sec-head p{margin-top:14px;color:rgba(28,28,28,.75)}
 .rule{display:flex;align-items:center;gap:14px;justify-content:center;margin-top:18px}
 .rule::before,.rule::after{content:"";height:2px;width:70px;background:var(--ink);opacity:.35}
-.rule i{color:var(--ember);font-style:normal;letter-spacing:.4em}
+.rule i{display:inline-block;width:56px;height:22px;font-size:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='22'%3E%3Cpath fill='%23D96B2B' d='M1 21 L14 6 L21 14 L28 2 L35 14 L42 6 L55 21 Z'/%3E%3C/svg%3E") center/contain no-repeat}
 
 /* ---------- difference ---------- */
 .difference{padding:90px 0;background:var(--card);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
